@@ -8,7 +8,7 @@ mqtt:
 
 light:
   
-  '-' platform: mqtt
+  '-' platform: 'mqtt'
   
     name: 'Office light1'
     
