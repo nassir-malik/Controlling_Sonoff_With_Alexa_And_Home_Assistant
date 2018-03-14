@@ -1,6 +1,9 @@
 # Controlling_Sonoff_With_Alexa_And_Home_Assistant
 Controlling Sonoff with alexa and Home Assistant
 
+YouTube Tutorial
+
+https://www.youtube.com/watch?v=ZhKAx-gGBnM
 
 Add Follwoing in config file.
 
