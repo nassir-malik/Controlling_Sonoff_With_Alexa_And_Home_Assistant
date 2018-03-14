@@ -7,7 +7,7 @@ Add Follwoing in config file.
 mqtt:
 
 light:
-  - platform: mqtt
+  '-' platform: mqtt
   
     name: 'Office light1'
     
