@@ -12,6 +12,8 @@ boolean connectUDP();
 void startHttpServer();
 void turnOnRelay();
 void turnOffRelay();
+void sendRelayState();
+bool switchStatus;
 /*********************************/
 /*********************************/
 /*********************************/
@@ -216,17 +218,27 @@ void startHttpServer() {
       //Serial.print("request:");
      //Serial.println(request);
  
+ if(request.indexOf("SetBinaryState") >= 0) {
       if(request.indexOf("<BinaryState>1</BinaryState>") > 0) {
           Serial.println("Got Turn on request");
+          switchStatus=1;
           turnOnRelay();
           digitalWrite(relayPin, HIGH);
+          
       }
 
       if(request.indexOf("<BinaryState>0</BinaryState>") > 0) {
           Serial.println("Got Turn off request");
+          switchStatus=0;
           turnOffRelay();
            digitalWrite(relayPin, LOW);
       }
+ }
+
+  if(request.indexOf("GetBinaryState") >= 0) {
+    Serial.println("Got binary state request");
+    sendRelayState();
+  }
       
       HTTP.send(200, "text/plain", "");
        publishLightState();
@@ -473,4 +485,23 @@ void setLightState() {
     turnOffRelay();
     Serial.println("INFO: Turn light off...");
   }
+}
+
+
+void sendRelayState() {
+  String body = 
+      "<s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soap/envelope/\" s:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><s:Body>\r\n"
+      "<u:GetBinaryStateResponse xmlns:u=\"urn:Belkin:service:basicevent:1\">\r\n"
+      "<BinaryState>";
+      
+  body += (switchStatus ? "1" : "0");
+  
+  body += "</BinaryState>\r\n"
+      "</u:GetBinaryStateResponse>\r\n"
+      "</s:Body> </s:Envelope>\r\n";
+  
+  HTTP.send(200, "text/xml", body.c_str());
+
+  Serial.print("Sending :");
+  Serial.println(body);
 }
