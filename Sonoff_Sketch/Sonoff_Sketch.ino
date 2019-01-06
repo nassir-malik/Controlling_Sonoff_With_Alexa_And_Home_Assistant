@@ -150,7 +150,7 @@ void loop() {
       // Turn on/off to indicate cannot connect ..      
   }
 }
-
+ 
 void prepareIds() {
   uint32_t chipId = ESP.getChipId();
   Serial.println("ChipId");
